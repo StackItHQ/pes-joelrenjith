@@ -1,0 +1,115 @@
+
+function extractSheetId(url) {
+  // Regular expression to match the sheet ID in the Google Sheets URL
+  var regex = /\/d\/(.*?)\/edit/;
+  var match = url.match(regex);
+  
+  if (match && match[1]) {
+    return match[1]; // Return the sheet ID
+  } else {
+    throw new Error("Sheet ID not found in URL.");
+  }
+}
+
+function sendNotification(e) {
+  var url =SpreadsheetApp.getActiveSpreadsheet().getUrl();;
+try {
+  var sheetId = extractSheetId(url);
+  console.log("Sheet ID:", sheetId);
+} catch (error) {
+  console.error(error.message);
+}
+  console.log("sendNotification function called");
+  if (!e) {
+    console.error("Event object is undefined");
+    return null;
+  }
+  if (!e.source) {
+    console.error("Event object is missing 'source' property");
+    return null;
+  }
+  if (!e.range) {
+    console.error("Event object is missing 'range' property");
+    return null;
+  }
+
+  try {
+    var sheet = e.source.getActiveSheet();
+    if (!sheet) {
+      console.error("Unable to get active sheet");
+      return null;
+    }
+
+    var range = e.range;
+    console.log("Range:", range.getA1Notation());
+
+    var newValue, oldValue, columnName, id, timestamp;
+    try {
+      newValue = range.getValue();
+      console.log("New value:", newValue);
+    } catch (error) {
+      console.error("Error getting new value:", error.toString());
+    }
+
+    try {
+      oldValue = e.oldValue || null;
+      console.log("Old value:", oldValue);
+    } catch (error) {
+      console.error("Error getting old value:", error.toString());
+    }
+
+    try {
+      var column = range.getColumn();
+      columnName = sheet.getRange(1, column).getValue();
+      console.log("Top cell value in column:", columnName);
+    } catch (error) {
+      console.error("Error getting top cell value:", error.toString());
+    }
+
+    try {
+      id = sheet.getRange(range.getRow(), 1).getValue();
+      console.log("Value at Column A:", id);
+    } catch (error) {
+      console.error("Error getting column A value:", error.toString());
+    }
+
+    timestamp = new Date().toISOString();
+    console.log("Timestamp:", timestamp);
+
+    // var sheetId = sheet.getSheetId();
+    var payload = {
+      sheetid: sheetId,
+      columnName: columnName,
+      oldValue: oldValue,
+      newValue: newValue,
+      id: id,
+      timestamp: timestamp
+    };
+
+    console.log("Payload prepared:", JSON.stringify(payload));
+
+    var url = '<enter your ngrok url>/notifications';
+
+    var options = {
+      'method': 'POST',
+      'contentType': 'application/json',
+      'payload': JSON.stringify(payload)
+    };
+
+    try {
+      var response = UrlFetchApp.fetch(url, options);
+      console.log("Response status:", response.getResponseCode());
+      console.log("Response content:", response.getContentText());
+    } catch (error) {
+      console.error("Error sending request:", error.toString());
+    }
+
+    console.log("POST request sent to:", url);
+
+    return sheetId; // Return the sheet ID
+
+  } catch (error) {
+    console.error("Error in sendNotification:", error.toString());
+    return null;
+  }
+}
