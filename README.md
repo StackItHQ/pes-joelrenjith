@@ -98,6 +98,23 @@ My application is built using Spring Boot and PostgreSQL, providing robust real-
 ### Application-Setup:
 * Visit google marketplace > search for sheets > click on the google sheets api and click enable > click on credentails and add a service account > click on the service account and select keys > create a new key, download it and put the JSON file into the directory right outside the src directory in the project.
 * in the application.properties file enter your postgres database name in the url and your postgres username and password.
+* go to your postgres database and enter the following commands
+    - ```
+      CREATE TABLE public.schema_link (
+          id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+          link VARCHAR(255),
+          table_name VARCHAR(255)
+      );
+      ```
+    - ```
+      CREATE TABLE public.schema_registry (
+          id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+          table_name VARCHAR(255),
+          column_name VARCHAR(255),
+          column_type VARCHAR(255),
+          gsheetcol VARCHAR(10)
+      );
+      ``` 
   
 ### User-Setup:
 * The user has to make a Google Sheet and change access from "Restricted" to "Anyone with the link" and set permissions to "Editor"
