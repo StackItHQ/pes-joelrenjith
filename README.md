@@ -48,7 +48,7 @@ We have a checklist at the bottom of this README file, which you should update a
 - [x] My code's working just fine! 🥳
 - [x] I have recorded a video showing it working and embedded it in the README ▶️
 - [x] I have tested all the normal working cases 😎
-- [ ] I have even solved some edge cases (brownie points) 💪
+- [x] I have even solved some edge cases (brownie points) 💪
 - [x] I added my very planned-out approach to the problem at the end of this README 📜
 
 ## Got Questions❓
@@ -60,7 +60,7 @@ All the best ✨.
 
 ## Developer's Section
 ### Architectue of the application:
-My application is built using Spring Boot and PostgreSQL, providing robust real-time synchronization between multiple pairs of database tables and Google Sheets. The system architecture includes the following key components:
+My application is built using Spring Boot and PostgreSQL, providing real-time synchronization **between multiple pairs of database tables and Google Sheets**. The system architecture includes the following key components:
 
 * **Real-Time Synchronization:**
 
@@ -81,6 +81,10 @@ My application is built using Spring Boot and PostgreSQL, providing robust real-
 * _Local Database:_ The PostgreSQL database is currently hosted locally.
 
 * _Remote Access_: The Spring Boot application is exposed to the internet using ngrok, allowing external access and interaction with the application.
+
+**Edge Cases:**
+* As mentioned above, my application can handle synchronisation _between multiple pairs of database tables and Google Sheets_.
+* The linking between tables in the database and Gooogle Sheets is persistent, i.e, the previous link between a Sheet and a Table remains connected even if the application has resatarted, while also being ready to create new links between another table and sheet on user demand.
 
 ### Requirements for the Setup:
 
